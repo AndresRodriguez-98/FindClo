@@ -1,0 +1,9 @@
+/* Page wrapper — fades in after the intro curtain lifts */
+.pageContent {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.1s;
+}
+
+.pageContent.visible {
+  opacity: 1;
+}

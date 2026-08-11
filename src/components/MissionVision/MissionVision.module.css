@@ -1,0 +1,167 @@
+.section { background: var(--color-bg); }
+
+/* ── Panel ──────────────────────────────────────── */
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 70vh;
+  border-top: 1px solid var(--color-border);
+
+  opacity: 0;
+  transform: translateX(-50px);
+  transition:
+    opacity 1s var(--ease-out-expo),
+    transform 1s var(--ease-out-expo);
+}
+
+.panel.reverse { transform: translateX(50px); direction: rtl; }
+.panel.reverse > * { direction: ltr; }
+
+.panel.visible { opacity: 1; transform: translateX(0); }
+
+/* ── Text block ─────────────────────────────────── */
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8vh 6vw;
+  gap: 1.4rem;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brand-light);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 32px rgba(0,0,0,0.6);
+}
+
+.body {
+  font-family: var(--font-sans);
+  font-size: clamp(0.88rem, 1.2vw, 1rem);
+  font-weight: 300;
+  line-height: 1.82;
+  color: var(--color-text-secondary);
+  max-width: 48ch;
+}
+
+.quote {
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  border-left: 2px solid var(--color-brand);
+  padding-left: 1rem;
+  margin: 0.4rem 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  padding-bottom: 2px;
+  width: fit-content;
+  transition: border-color 0.25s, color 0.25s, gap 0.25s;
+}
+
+.link:hover {
+  border-color: var(--color-brand-light);
+  color: var(--color-brand-light);
+  gap: 0.85rem;
+}
+
+/* ── Visual block ───────────────────────────────── */
+.visual {
+  position: relative;
+  background: var(--accent, #006251);
+  overflow: hidden;
+}
+
+.videoBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6; /* Increased opacity so it looks sharper */
+  mix-blend-mode: luminosity; /* Blends better with the green background while keeping detail */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.visualInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 2.5rem;
+  z-index: 1; /* Keep above video and noise */
+}
+
+.visualLabel {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 5rem);
+  /*
+    Soft teal-mint: visible but not dominant — creates a
+    "debossed" ghost-text effect on the solid green background.
+  */
+  color: rgba(0, 230, 170, 0.18);
+  line-height: 1;
+  user-select: none;
+}
+
+/* Buenos Aires tag */
+.visualTag {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  z-index: 1; /* Keep above video and noise */
+}
+
+@media (max-width: 768px) {
+  .panel, .panel.reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+  }
+  .visual { min-height: 260px; }
+}

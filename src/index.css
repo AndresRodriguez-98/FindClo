@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Nunito:wght@700&display=swap');
+
+/* ─────────────────────────────────────────
+   DRUK WIDE BOLD — commercial typeface
+   Place DrukWide-Bold.woff2 in /public/fonts/
+   to activate. Falls back to Impact while
+   font files are not yet available.
+──────────────────────────────────────────── */
+@font-face {
+  font-family: 'Druk Wide';
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Druk Wide Bold'),
+    local('DrukWide-Bold'),
+    url('/fonts/DrukWide-Bold.woff2') format('woff2'),
+    url('/fonts/DrukWide-Bold.woff')  format('woff');
+}
+
+/* ─────────────────────────────────────────
+   Design tokens
+──────────────────────────────────────────── */
+:root {
+  /* Brand greens */
+  --color-brand:       #006251;   /* Official Findclo green */
+  --color-brand-light: #00a882;   /* Readable on dark bg (labels, borders) */
+  --color-brand-dark:  #004840;   /* Deep green for fills */
+  --color-brand-glow:  rgba(0, 98, 81, 0.35);
+
+  /* Surface */
+  --color-bg:          #050505;
+  --color-surface:     #0c0c0c;
+  --color-border:      rgba(255, 255, 255, 0.07);
+
+  /* Text */
+  --color-text-primary:   #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.52);
+
+  /* Typography */
+  --font-display: 'Druk Wide', 'Impact', 'Haettenschweiler', 'Arial Black', sans-serif;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing & shape */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-pill: 100px;
+
+  /* Easing */
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ─────────────────────────────────────────
+   Reset
+──────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+img, video, canvas { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }

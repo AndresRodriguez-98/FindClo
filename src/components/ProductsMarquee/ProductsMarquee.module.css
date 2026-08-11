@@ -1,0 +1,73 @@
+.marqueeWrapper {
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  padding: 1.4rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right, transparent 0%, black 6%, black 94%, transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right, transparent 0%, black 6%, black 94%, transparent 100%
+  );
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 0;
+  animation: scroll 32s linear infinite;
+}
+
+/* ── Individual brand slot ────────────────── */
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3rem;
+  border-right: 1px solid var(--color-border);
+  height: 28px;
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
+.item:hover {
+  opacity: 1;
+}
+
+/* Image logos from Simple Icons CDN */
+.brandLogo {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  /* CDN icons are colored — strip to flat gray */
+  filter: brightness(0) invert(0.42);
+  transition: filter 0.25s ease;
+  display: block;
+}
+
+.item:hover .brandLogo {
+  filter: brightness(0) invert(0.7);
+}
+
+/* Text-only brand marks */
+.brandText {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6b7280;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.item:hover .brandText {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

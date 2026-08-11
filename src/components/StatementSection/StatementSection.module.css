@@ -1,0 +1,139 @@
+.section {
+  border-top: 1px solid var(--color-border);
+  padding: 14vh 6vw 12vh;
+  /* Dark-to-teal radial gradient matching the brand reference image */
+  background:
+    radial-gradient(
+      ellipse 75% 65% at 90% 15%,
+      #006251 0%,
+      #003d2e 38%,
+      #000e09 68%,
+      #050505 100%
+    );
+}
+
+/* ── Header ────────────────────────────────────── */
+.header {
+  max-width: 860px;
+  margin-bottom: 8vh;
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brand-light);
+  margin-bottom: 1.8rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.8rem, 7.5vw, 9rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+/* ── Benefits grid ─────────────────────────────── */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  border: 1px solid var(--color-border);
+}
+
+/* ── Card ──────────────────────────────────────── */
+.card {
+  padding: 3rem 2.5rem;
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s var(--ease-out-expo) var(--delay, 0s),
+    transform 0.8s var(--ease-out-expo) var(--delay, 0s);
+}
+
+.card:last-child {
+  border-right: none;
+}
+
+/* Green line that grows on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.cardVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cardNumber {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--color-brand-light);
+}
+
+.cardTitle {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.cardBody {
+  font-family: var(--font-sans);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .card:last-child {
+    border-bottom: none;
+  }
+}

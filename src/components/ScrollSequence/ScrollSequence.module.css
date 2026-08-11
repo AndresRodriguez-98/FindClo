@@ -1,0 +1,31 @@
+/* ScrollSequence.module.css */
+
+/* 
+  800vh gives a comfortable scrubbing speed across 150 frames.
+  Increase this value to slow down the animation; decrease to speed it up.
+*/
+.scrollContainer {
+  position: relative;
+  width: 100%;
+  height: 650vh;
+}
+
+/* Sticky viewport keeps the canvas pinned while the parent scrolls */
+.stickyViewport {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

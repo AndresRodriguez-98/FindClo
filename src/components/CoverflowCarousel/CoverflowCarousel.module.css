@@ -1,0 +1,253 @@
+/* CoverflowCarousel — CSS Modules translation of the Tailwind source */
+
+/* ── Root & wrapper ────────────────────────────── */
+.root {
+  width: 100%;
+}
+
+.wrapper {
+  position: relative;
+}
+
+/* ── Viewport / frame ──────────────────────────── */
+.frame {
+  cursor: grab;
+  overflow: hidden;
+  /* py-10 equivalent */
+  padding: 3.5rem 0;
+  outline: none;
+  /* Let the page keep vertical scrolling during horizontal drag */
+  touch-action: pan-y;
+}
+
+.frame:active {
+  cursor: grabbing;
+}
+
+.frame:focus-visible {
+  box-shadow: 0 0 0 2px rgba(0, 98, 81, 0.65);
+  border-radius: 4px;
+}
+
+/* ── Track (preserve-3d container) ────────────── */
+.track {
+  position: relative;
+  user-select: none;
+  height: var(--cf-card);
+  transform-style: preserve-3d;
+}
+
+/* ── Individual card ───────────────────────────── */
+.card {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #111;
+  box-shadow:
+    0 25px 35px -5px rgba(0, 0, 0, 0.55),
+    0 10px 15px -5px rgba(0, 0, 0, 0.35);
+  will-change: transform;
+  width: var(--cf-card);
+  /* Initial state — paint() takes over immediately */
+  opacity: 0;
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  display: block;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Dim the image when overlay is open */
+.cardImgDimmed {
+  opacity: 0.25;
+}
+
+/* Cards are interactive — pointer events needed for click */
+.card {
+  cursor: pointer;
+}
+
+/* ── Overlay ─────────────────────────────────────── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+  border-radius: inherit;
+  /* Subtle vignette so the link is readable */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.overlayVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlayLink {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0a0a0a;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.35),
+    0 0 0 1.5px rgba(255, 255, 255, 0.25) inset;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.overlayLink:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    0 0 0 1.5px rgba(255, 255, 255, 0.35) inset;
+}
+
+.overlayLink:active {
+  transform: scale(0.97);
+}
+
+.overlayIcon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.overlayLinkDisabled {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Card glow when overlay is active */
+.cardOverlayOpen {
+  box-shadow:
+    0 25px 35px -5px rgba(0, 0, 0, 0.55),
+    0 10px 15px -5px rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+/* ── Navigation arrows ─────────────────────────── */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  z-index: 200;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.navBtn:hover {
+  background: rgba(0, 98, 81, 0.6);
+  border-color: rgba(0, 98, 81, 0.8);
+  color: #fff;
+}
+
+.navBtnLeft  { left:  0.75rem; }
+.navBtnRight { right: 0.75rem; }
+
+/* ── Caption ───────────────────────────────────── */
+.caption {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1.5rem;
+  animation: captionIn 0.3s ease both;
+}
+
+@keyframes captionIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.captionTitle {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.captionSub {
+  margin-top: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* ── Pagination dots ───────────────────────────── */
+.pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  padding: 0;
+}
+
+.dotActive {
+  background: var(--color-brand-light);
+  transform: scale(1.4);
+}

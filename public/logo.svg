@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" role="img" aria-label="findclo">
+  <!--
+    findclo wordmark SVG
+    Font: Nunito 700 (closest match to brand logotype rounded style)
+    Color: #006251 (official brand green)
+
+    When used as <img src="logo.svg">, browsers block external fonts.
+    The fallback stack (system-ui → Trebuchet MS) renders adequately.
+    For pixel-perfect rendering, embed as inline SVG in the HTML.
+  -->
+  <text
+    x="50%"
+    y="52"
+    text-anchor="middle"
+    font-family="'Nunito', 'Varela Round', 'Comfortaa', 'Trebuchet MS', system-ui, sans-serif"
+    font-weight="700"
+    font-size="56"
+    letter-spacing="-1"
+    fill="#006251"
+  >findclo</text>
+</svg>

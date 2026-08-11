@@ -1,0 +1,40 @@
+/* Full-screen curtain that covers page on first load */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Slide up when exiting */
+  transform: translateY(0);
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.curtain.exit {
+  transform: translateY(-100%);
+}
+
+/* Logo inside curtain */
+.logo {
+  font-family: var(--font-sans);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+
+  /* Brand gradient */
+  background: linear-gradient(135deg, #006251 0%, #004840 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Fade in on enter */
+  animation: logoAppear 0.5s var(--ease-out-expo) 0.15s both;
+}
+
+@keyframes logoAppear {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
