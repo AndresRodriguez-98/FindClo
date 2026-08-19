@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Nunito:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Nunito:wght@700;800&display=swap');
 
 /* ─────────────────────────────────────────
    DRUK WIDE BOLD — commercial typeface
@@ -19,40 +19,279 @@
 }
 
 /* ─────────────────────────────────────────
-   Design tokens
+   Design tokens - Base & Theme Variables
 ──────────────────────────────────────────── */
-:root {
+:root,
+[data-theme="light"] {
   /* Brand greens */
   --color-brand:       #006251;   /* Official Findclo green */
-  --color-brand-light: #00a882;   /* Readable on dark bg (labels, borders) */
-  --color-brand-dark:  #004840;   /* Deep green for fills */
-  --color-brand-glow:  rgba(0, 98, 81, 0.35);
+  --color-brand-light: #00a882;   /* Vibrant accessible mint */
+  --color-brand-dark:  #004840;   /* Deep green */
+  --color-brand-glow:  rgba(0, 98, 81, 0.25);
+  --color-brand-rgb:   0, 98, 81;
 
-  /* Surface */
-  --color-bg:          #050505;
-  --color-surface:     #0c0c0c;
-  --color-border:      rgba(255, 255, 255, 0.07);
+  /* Surfaces & Backgrounds */
+  --color-bg:          #ffffff;
+  --color-bg-subtle:   #f8faf9;
+  --color-surface:     #ffffff;
+  --color-surface-hover: #f3f4f6;
+  --color-border:      rgba(0, 0, 0, 0.08);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-shadow:      rgba(0, 0, 0, 0.06);
 
-  /* Text */
-  --color-text-primary:   #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.52);
+  /* Typography Colors */
+  --color-text-primary:   #0a0a0a;
+  --color-text-secondary: #4b5563;
+  --color-text-muted:     #9ca3af;
 
-  /* Typography */
-  --font-display: 'Druk Wide', 'Impact', 'Haettenschweiler', 'Arial Black', sans-serif;
-  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Navbar */
+  --nav-bg:            rgba(255, 255, 255, 0.88);
+  --nav-scrolled-bg:   rgba(255, 255, 255, 0.96);
+  --nav-border:        rgba(0, 0, 0, 0.06);
+  --nav-text:          #374151;
+  --nav-text-active:   #006251;
+  --nav-btn-border:    #006251;
+  --nav-btn-text:      #006251;
+  --nav-btn-bg-hover:  #006251;
+  --nav-btn-text-hover: #ffffff;
+
+  /* Hero Section — Light Mode
+     ─────────────────────────────────────────────────
+     Design decision: use a DIRECTIONAL gradient that
+     concentrates opacity on the LEFT (text area) and
+     fades to near-transparent on the RIGHT (image area).
+     This lets the clothing photo show through vibrantly
+     while keeping heading + tagline perfectly legible.
+     Max left-anchor opacity kept at 0.78 (not 0.94) to
+     let even the left side feel alive, not washed out.
+  ─────────────────────────────────────────────────── */
+  --hero-overlay-bg: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.72) 28%,
+    rgba(255, 255, 255, 0.42) 52%,
+    rgba(255, 255, 255, 0.12) 72%,
+    rgba(255, 255, 255, 0.0)  100%
+  );
+  --hero-heading-1:    #0a0a0a;
+  --hero-heading-2:    #006251;
+  --hero-tagline:      #1a2330;
+  --hero-highlight:    #006251;
+  --hero-cta-bg:       #006251;
+  --hero-cta-color:    #ffffff;
+  --hero-dock-bg:      rgba(255, 255, 255, 0.90);
+  --hero-dock-border:  rgba(0, 0, 0, 0.10);
+  --hero-dock-shadow:  0 20px 45px -12px rgba(0, 0, 0, 0.14);
+  --hero-dock-title:   #0a0a0a;
+  --hero-dock-desc:    #374151;
+  --hero-dock-icon-bg: rgba(0, 98, 81, 0.10);
+  --hero-dock-icon:    #006251;
+  --hero-dock-divider: rgba(0, 0, 0, 0.08);
+  --hero-scroll-color: #006251;
+
+  /* Statement Section */
+  --statement-bg:      linear-gradient(180deg, #ffffff 0%, #f4f8f6 40%, #ffffff 100%);
+  --statement-label:   #006251;
+  --statement-heading: #0a0a0a;
+  --statement-card-bg: #ffffff;
+  --statement-card-border: rgba(0, 0, 0, 0.08);
+  --statement-card-num: #006251;
+  --statement-card-title: #0a0a0a;
+  --statement-card-body: #4b5563;
+  --statement-card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+
+  /* Marquee */
+  --marquee-bg:        #f8faf9;
+  --marquee-border:    rgba(0, 0, 0, 0.06);
+  --marquee-text:      #4b5563;
+  --marquee-filter:    brightness(0) invert(0.25);
+  --marquee-filter-hover: brightness(0) invert(0);
+
+  /* Mission / Vision */
+  --mission-bg:        #ffffff;
+  --mission-text-bg:   #f8faf9;
+  --mission-border:    rgba(0, 0, 0, 0.08);
+  --mission-label:     #006251;
+  --mission-heading:   #0a0a0a;
+  --mission-body:      #4b5563;
+  --mission-quote:     #2b3340;
+  --mission-link:      #0a0a0a;
+  --mission-link-hover: #006251;
+
+  /* Carousel Section */
+  --carousel-bg:       #f4f8f6;
+  --carousel-border:   rgba(0, 0, 0, 0.08);
+  --carousel-label:    #006251;
+  --carousel-heading:  #0a0a0a;
+  --carousel-sub:      #4b5563;
+  --carousel-card-bg:  #ffffff;
+  --carousel-nav-bg:   rgba(255, 255, 255, 0.92);
+  --carousel-nav-color: #0a0a0a;
+  --carousel-nav-border: rgba(0, 0, 0, 0.1);
+  --carousel-dot-bg:   rgba(0, 0, 0, 0.2);
+  --carousel-dot-active: #006251;
+
+  /* Footer */
+  --footer-bg:         #ffffff;
+  --footer-border:     rgba(0, 0, 0, 0.08);
+  --footer-text:       #6b7280;
+  --footer-text-hover: #006251;
+
+  /* For Brands (Para Marcas) — always dark themed */
+  --brands-bg:              #0a0a0a;
+  --brands-border:          rgba(255, 255, 255, 0.08);
+  --brands-label:           #00a882;
+  --brands-heading:         #ffffff;
+  --brands-body:            rgba(255, 255, 255, 0.55);
+  --brands-card-bg:         rgba(18, 18, 18, 0.9);
+  --brands-card-hover:      rgba(0, 168, 130, 0.04);
+  --brands-card-title:      #ffffff;
+  --brands-card-body:       rgba(255, 255, 255, 0.5);
+  --brands-cta-border:      rgba(0, 168, 130, 0.6);
+  --brands-cta-text:        #00a882;
+  --brands-cta-bg-hover:    rgba(0, 98, 81, 0.18);
+  --brands-cta-text-hover:  #ffffff;
 
   /* Spacing & shape */
+  --font-display: 'Druk Wide', 'Impact', 'Haettenschweiler', 'Arial Black', sans-serif;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-pill: 100px;
-
-  /* Easing */
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+[data-theme="dark"],
+.dark {
+  /* Brand greens */
+  --color-brand:       #006251;   /* Official Findclo green */
+  --color-brand-light: #00a882;   /* Vibrant accessible mint */
+  --color-brand-dark:  #004840;   /* Deep green */
+  --color-brand-glow:  rgba(0, 98, 81, 0.35);
+  --color-brand-rgb:   0, 98, 81;
+
+  /* Surfaces & Backgrounds */
+  --color-bg:          #050505;
+  --color-bg-subtle:   #0c0c0c;
+  --color-surface:     #0c0c0c;
+  --color-surface-hover: #161616;
+  --color-border:      rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  --color-shadow:      rgba(0, 0, 0, 0.6);
+
+  /* Typography Colors */
+  --color-text-primary:   #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.55);
+  --color-text-muted:     rgba(255, 255, 255, 0.4);
+
+  /* Navbar */
+  --nav-bg:            rgba(5, 5, 5, 0.78);
+  --nav-scrolled-bg:   rgba(5, 5, 5, 0.94);
+  --nav-border:        rgba(255, 255, 255, 0.08);
+  --nav-text:          rgba(255, 255, 255, 0.65);
+  --nav-text-active:   #ffffff;
+  --nav-btn-border:    rgba(255, 255, 255, 0.25);
+  --nav-btn-text:      #ffffff;
+  --nav-btn-bg-hover:  rgba(0, 98, 81, 0.3);
+  --nav-btn-text-hover: #ffffff;
+
+  /* Hero Section (Reverted to dark background aesthetic for dark mode) */
+  --hero-overlay-bg: radial-gradient(
+    ellipse 85% 75% at 25% 45%,
+    rgba(5, 5, 5, 0.86) 0%,
+    rgba(5, 5, 5, 0.74) 45%,
+    rgba(5, 5, 5, 0.52) 80%,
+    rgba(5, 5, 5, 0.25) 100%
+  );
+  --hero-heading-1:    #ffffff;
+  --hero-heading-2:    #00a882;
+  --hero-tagline:      rgba(255, 255, 255, 0.8);
+  --hero-highlight:    #00a882;
+  --hero-cta-bg:       #006251;
+  --hero-cta-color:    #ffffff;
+  --hero-dock-bg:      rgba(15, 15, 15, 0.88);
+  --hero-dock-border:  rgba(255, 255, 255, 0.1);
+  --hero-dock-shadow:  0 20px 45px -12px rgba(0, 0, 0, 0.6);
+  --hero-dock-title:   #ffffff;
+  --hero-dock-desc:    rgba(255, 255, 255, 0.62);
+  --hero-dock-icon-bg: rgba(0, 168, 130, 0.15);
+  --hero-dock-icon:    #00a882;
+  --hero-dock-divider: rgba(255, 255, 255, 0.08);
+  --hero-scroll-color: #00a882;
+
+  /* Statement Section */
+  --statement-bg:      radial-gradient(
+    ellipse 75% 65% at 90% 15%,
+    #006251 0%,
+    #003d2e 38%,
+    #000e09 68%,
+    #050505 100%
+  );
+  --statement-label:   var(--color-brand-light);
+  --statement-heading: #ffffff;
+  --statement-card-bg: transparent;
+  --statement-card-border: rgba(255, 255, 255, 0.08);
+  --statement-card-num: var(--color-brand-light);
+  --statement-card-title: #ffffff;
+  --statement-card-body: rgba(255, 255, 255, 0.55);
+  --statement-card-shadow: none;
+
+  /* Marquee */
+  --marquee-bg:        #050505;
+  --marquee-border:    rgba(255, 255, 255, 0.08);
+  --marquee-text:      #e5e7eb;
+  --marquee-filter:    brightness(0) invert(0.76);
+  --marquee-filter-hover: brightness(0) invert(1);
+
+  /* Mission / Vision */
+  --mission-bg:        #050505;
+  --mission-text-bg:   #050505;
+  --mission-border:    rgba(255, 255, 255, 0.08);
+  --mission-label:     var(--color-brand-light);
+  --mission-heading:   #ffffff;
+  --mission-body:      rgba(255, 255, 255, 0.52);
+  --mission-quote:     rgba(255, 255, 255, 0.5);
+  --mission-link:      #ffffff;
+  --mission-link-hover: var(--color-brand-light);
+
+  /* Carousel Section */
+  --carousel-bg:       #050505;
+  --carousel-border:   rgba(255, 255, 255, 0.08);
+  --carousel-label:    var(--color-brand-light);
+  --carousel-heading:  #ffffff;
+  --carousel-sub:      rgba(255, 255, 255, 0.52);
+  --carousel-card-bg:  #111111;
+  --carousel-nav-bg:   rgba(5, 5, 5, 0.7);
+  --carousel-nav-color: rgba(255, 255, 255, 0.8);
+  --carousel-nav-border: rgba(255, 255, 255, 0.1);
+  --carousel-dot-bg:   rgba(255, 255, 255, 0.3);
+  --carousel-dot-active: var(--color-brand-light);
+
+  /* Footer */
+  --footer-bg:         #050505;
+  --footer-border:     rgba(255, 255, 255, 0.08);
+  --footer-text:       rgba(255, 255, 255, 0.4);
+  --footer-text-hover: var(--color-brand-light);
+
+  /* For Brands (Para Marcas) — always dark themed */
+  --brands-bg:              #050505;
+  --brands-border:          rgba(255, 255, 255, 0.07);
+  --brands-label:           #00a882;
+  --brands-heading:         #ffffff;
+  --brands-body:            rgba(255, 255, 255, 0.52);
+  --brands-card-bg:         rgba(255, 255, 255, 0.02);
+  --brands-card-hover:      rgba(0, 168, 130, 0.05);
+  --brands-card-title:      #ffffff;
+  --brands-card-body:       rgba(255, 255, 255, 0.45);
+  --brands-cta-border:      rgba(0, 168, 130, 0.55);
+  --brands-cta-text:        #00a882;
+  --brands-cta-bg-hover:    rgba(0, 98, 81, 0.22);
+  --brands-cta-text-hover:  #ffffff;
+}
+
 /* ─────────────────────────────────────────
-   Reset
+   Reset & Global Transitions
 ──────────────────────────────────────────── */
 *, *::before, *::after {
   margin: 0;
@@ -66,6 +305,9 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -74,6 +316,7 @@ body {
   font-family: var(--font-sans);
   line-height: 1.5;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {

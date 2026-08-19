@@ -1,5 +1,93 @@
-/* Footer.module.css — styles to be added when designing the footer */
-
 .footer {
   width: 100%;
+  background: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  padding: 5rem 6vw 2.5rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  padding-bottom: 3.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-width: 380px;
+}
+
+.logo {
+  font-family: 'Nunito', 'Varela Round', 'Inter', system-ui, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: #006251;
+  user-select: none;
+}
+
+.tagline {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--footer-text);
+  line-height: 1.6;
+}
+
+.linksCol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+.footerLink {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: var(--footer-text-hover);
+}
+
+.bottomBar {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copy {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--footer-text);
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 3.5rem 5vw 2rem;
+  }
+  .inner {
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2.5rem;
+  }
+  .linksCol {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }

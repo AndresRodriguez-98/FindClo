@@ -1,4 +1,4 @@
-/* CoverflowCarousel — CSS Modules translation of the Tailwind source */
+/* CoverflowCarousel — CSS Modules translation with theme token support */
 
 /* ── Root & wrapper ────────────────────────────── */
 .root {
@@ -13,10 +13,8 @@
 .frame {
   cursor: grab;
   overflow: hidden;
-  /* py-10 equivalent */
   padding: 3.5rem 0;
   outline: none;
-  /* Let the page keep vertical scrolling during horizontal drag */
   touch-action: pan-y;
 }
 
@@ -25,7 +23,7 @@
 }
 
 .frame:focus-visible {
-  box-shadow: 0 0 0 2px rgba(0, 98, 81, 0.65);
+  box-shadow: 0 0 0 2px var(--color-brand-light);
   border-radius: 4px;
 }
 
@@ -45,14 +43,16 @@
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 1rem;
-  background: #111;
+  background: var(--carousel-card-bg);
   box-shadow:
-    0 25px 35px -5px rgba(0, 0, 0, 0.55),
-    0 10px 15px -5px rgba(0, 0, 0, 0.35);
+    0 25px 35px -5px var(--color-shadow),
+    0 10px 15px -5px rgba(0, 0, 0, 0.2);
   will-change: transform;
   width: var(--cf-card);
-  /* Initial state — paint() takes over immediately */
   opacity: 0;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cardImg {
@@ -70,9 +70,39 @@
   opacity: 0.25;
 }
 
-/* Cards are interactive — pointer events needed for click */
-.card {
-  cursor: pointer;
+/* ── Category Tag Bar ────────────────────────────── */
+.cardCategoryBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.4rem 1rem 0.85rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.5) 60%,
+    transparent 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.cardCategoryName {
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 1.1vw, 0.88rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.cardOverlayOpen .cardCategoryBar {
+  opacity: 0;
 }
 
 /* ── Overlay ─────────────────────────────────────── */
@@ -86,11 +116,10 @@
   pointer-events: none;
   transition: opacity 0.28s ease;
   border-radius: inherit;
-  /* Subtle vignette so the link is readable */
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 0, 0, 0.08) 0%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.65) 100%
   );
 }
 
@@ -106,7 +135,7 @@
   gap: 0.35rem;
   padding: 0.75rem 1.4rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   color: #0a0a0a;
   font-family: var(--font-sans);
   font-weight: 700;
@@ -119,7 +148,7 @@
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.35),
     0 0 0 1.5px rgba(255, 255, 255, 0.25) inset;
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   white-space: nowrap;
 }
 
@@ -160,9 +189,9 @@
 /* Card glow when overlay is active */
 .cardOverlayOpen {
   box-shadow:
-    0 25px 35px -5px rgba(0, 0, 0, 0.55),
+    0 25px 35px -5px var(--color-shadow),
     0 10px 15px -5px rgba(0, 0, 0, 0.35),
-    0 0 0 2px rgba(255, 255, 255, 0.25);
+    0 0 0 2px var(--color-brand-light);
 }
 
 /* ── Navigation arrows ─────────────────────────── */
@@ -172,23 +201,29 @@
   z-index: 200;
   transform: translateY(-50%);
   border-radius: 50%;
-  background: rgba(5, 5, 5, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--carousel-nav-bg);
+  border: 1px solid var(--carousel-nav-border);
   padding: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  color: var(--carousel-nav-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .navBtn:hover {
-  background: rgba(0, 98, 81, 0.6);
-  border-color: rgba(0, 98, 81, 0.8);
-  color: #fff;
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.08);
 }
 
 .navBtnLeft  { left:  0.75rem; }
@@ -211,20 +246,22 @@
 
 .captionTitle {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--color-text-primary);
+  color: var(--carousel-heading);
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 .captionSub {
   margin-top: 0.25rem;
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   font-weight: 400;
-  color: var(--color-text-secondary);
+  color: var(--carousel-sub);
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 /* ── Pagination dots ───────────────────────────── */
@@ -240,14 +277,14 @@
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--carousel-dot-bg);
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   padding: 0;
 }
 
 .dotActive {
-  background: var(--color-brand-light);
+  background: var(--carousel-dot-active);
   transform: scale(1.4);
 }

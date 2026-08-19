@@ -76,7 +76,7 @@ export default function ScrollSequence({ children }) {
     function animate() {
       const diff = state.targetFrame - state.currentFrame
       if (Math.abs(diff) > 0.001) {
-        state.currentFrame += diff * 0.12
+        state.currentFrame += diff * 0.14
       } else {
         state.currentFrame = state.targetFrame
       }
@@ -98,11 +98,9 @@ export default function ScrollSequence({ children }) {
     }
 
     function onScroll() { updateTarget() }
-    function onWheel(e) { window.scrollBy({ top: e.deltaY, behavior: 'instant' }) }
     function onResize() { resizeCanvas(); updateTarget() }
 
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('wheel', onWheel, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
 
     resizeCanvas()
@@ -112,7 +110,6 @@ export default function ScrollSequence({ children }) {
 
     return () => {
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('wheel', onWheel)
       window.removeEventListener('resize', onResize)
       if (state.rafId) cancelAnimationFrame(state.rafId)
     }

@@ -1,139 +1,283 @@
+/* ──────────────────────────────────────────────────
+   StatementSection.module.css — "Para Vos"
+   Sticky Scrollytelling & Layered Parallax Reveal
+────────────────────────────────────────────────── */
+
+/* ── Section Parent: multi-viewport scroll track ── */
 .section {
+  position: relative;
+  width: 100%;
+  height: 200vh; /* Scroll track for parallax & reveal */
+  background: var(--statement-bg);
   border-top: 1px solid var(--color-border);
-  padding: 14vh 6vw 12vh;
-  /* Dark-to-teal radial gradient matching the brand reference image */
-  background:
-    radial-gradient(
-      ellipse 75% 65% at 90% 15%,
-      #006251 0%,
-      #003d2e 38%,
-      #000e09 68%,
-      #050505 100%
-    );
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* ── Header ────────────────────────────────────── */
-.header {
-  max-width: 860px;
-  margin-bottom: 8vh;
-  opacity: 0;
-  transform: translateY(50px);
-  transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
+/* ── Sticky Viewport: pinned during scroll ──────── */
+.stickyViewport {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10vh 6vw 8vh;
+  box-sizing: border-box;
 }
 
-.header.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* ── Ambient Glow (Top Right Emerald Atmosphere) ── */
+.ambientGlow {
+  position: absolute;
+  top: -15%;
+  right: -8%;
+  width: 75vw;
+  height: 75vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 168, 130, 0.16) 0%,
+    rgba(0, 98, 81, 0.08) 40%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Capa Superior (Z-Index: 10): Título y Label con Parallax ── */
+.titleLayer {
+  position: relative;
+  z-index: 10;
+  max-width: 960px;
+  will-change: transform;
+  pointer-events: auto;
 }
 
 .label {
   font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-brand-light);
-  margin-bottom: 1.8rem;
+  color: var(--statement-label);
+  margin-bottom: 1.4rem;
+  transition: color 0.3s ease;
 }
 
 .heading {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.8rem, 7.5vw, 9rem);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: var(--color-text-primary);
+  font-size: clamp(2.2rem, 5.5vw, 6.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--statement-heading);
+  transition: color 0.3s ease;
 }
 
-/* ── Benefits grid ─────────────────────────────── */
-.grid {
-  list-style: none;
+/* ── Capa Inferior (Z-Index: 5): Tarjetas emergentes con Fade-in ── */
+.cardsLayer {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translate3d(0, 160px, 0);
+  will-change: transform, opacity;
+}
+
+/* ── Grid de 3 Tarjetas Bento ─────────────────────── */
+.gridContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--statement-card-border);
+  border-radius: var(--radius-md);
+  background: var(--statement-card-bg);
+  box-shadow: var(--statement-card-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
 }
 
-/* ── Card ──────────────────────────────────────── */
+/* ── Benefit Card Individual ──────────────────────── */
 .card {
-  padding: 3rem 2.5rem;
-  border-right: 1px solid var(--color-border);
+  padding: 2.5rem 2.2rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   position: relative;
+  border-right: 1px solid var(--statement-card-border);
   overflow: hidden;
-
-  opacity: 0;
-  transform: translateY(40px);
-  transition:
-    opacity 0.8s var(--ease-out-expo) var(--delay, 0s),
-    transform 0.8s var(--ease-out-expo) var(--delay, 0s);
+  transition: background-color 0.25s ease, border-color 0.3s ease;
 }
 
 .card:last-child {
   border-right: none;
 }
 
-/* Green line that grows on hover */
+/* Mouse-tracking Spotlight Glow */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 168, 130, 0.11) 0%,
+    transparent 80%
+  );
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.card:hover .spotlight {
+  opacity: 1;
+}
+
+/* Top accent line on hover */
 .card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: var(--color-brand);
+  height: 2.5px;
+  background: linear-gradient(90deg, #006251, #00a882);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s var(--ease-out-expo);
+  z-index: 2;
 }
 
 .card:hover::before {
   transform: scaleX(1);
 }
 
-.cardVisible {
-  opacity: 1;
-  transform: translateY(0);
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .cardNumber {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 500;
+  font-size: 0.76rem;
+  font-weight: 700;
   letter-spacing: 0.2em;
-  color: var(--color-brand-light);
+  color: var(--statement-card-num);
+  transition: color 0.3s ease;
+}
+
+.iconCircle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 168, 130, 0.35);
+  background: rgba(0, 168, 130, 0.05);
+  color: var(--statement-card-num);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card:hover .iconCircle {
+  border-color: var(--color-brand-light);
+  background: rgba(0, 168, 130, 0.14);
+  box-shadow: 0 0 20px rgba(0, 168, 130, 0.28);
+  transform: scale(1.08);
 }
 
 .cardTitle {
   font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
-  line-height: 1.2;
-  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: clamp(0.98rem, 1.3vw, 1.25rem);
+  line-height: 1.28;
+  color: var(--statement-card-title);
   letter-spacing: -0.01em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
 }
 
 .cardBody {
   font-family: var(--font-sans);
-  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
-  font-weight: 300;
-  line-height: 1.75;
-  color: var(--color-text-secondary);
+  font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+  font-weight: 400;
+  line-height: 1.68;
+  color: var(--statement-card-body);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
 }
 
-@media (max-width: 900px) {
-  .grid {
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 992px) {
+  .section {
+    height: auto;
+    min-height: auto;
+  }
+
+  .stickyViewport {
+    position: relative;
+    height: auto;
+    min-height: auto;
+    padding: 10vh 6vw 8vh;
+    gap: 5vh;
+  }
+
+  .cardsLayer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .titleLayer {
+    transform: none !important;
+  }
+
+  .gridContainer {
     grid-template-columns: 1fr;
   }
+
   .card {
     border-right: none;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--statement-card-border);
+    padding: 2rem 1.6rem;
   }
+
   .card:last-child {
     border-bottom: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .stickyViewport {
+    padding: 8vh 5vw 6vh;
+    gap: 4vh;
+  }
+
+  .card {
+    padding: 1.8rem 1.3rem;
+    gap: 1rem;
   }
 }

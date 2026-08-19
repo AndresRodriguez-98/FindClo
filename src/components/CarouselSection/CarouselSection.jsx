@@ -1,160 +1,156 @@
+import { useEffect, useRef } from 'react'
 import { CoverflowCarousel } from '../CoverflowCarousel/CoverflowCarousel'
-import { useScrollReveal } from '../../hooks/useScrollReveal'
 import styles from './CarouselSection.module.css'
 
-/* ─── All images are local (public/images/) — no external CDN dependency ── */
-const SLIDES = [
-  /* ── King Of The Kongo ─────────────────────────────────────── */
-  {
-    src: '/images/kotk-campera-sakura.webp',
-    alt: 'Campera Sakura — King Of The Kongo',
-    title: 'King Of The Kongo',
-    subtitle: 'Campera Sakura',
-    href: 'https://www.findclo.com/search?search=King+Of+The+Kongo'
-  },
-  {
-    src: '/images/kotk-team-knit-black.webp',
-    alt: 'Kongo Team Knit Black — King Of The Kongo',
-    title: 'King Of The Kongo',
-    subtitle: 'Kongo Team Knit Black',
-    href: 'https://www.findclo.com/product/41024'
-  },
-  {
-    src: '/images/kotk-chomba-boxy-black.webp',
-    alt: 'Chomba Boxy Fit 01 Black — King Of The Kongo',
-    title: 'King Of The Kongo',
-    subtitle: 'Chomba Boxy Fit "01" Black',
-    href: 'https://www.findclo.com/search?search=King+Of+The+Kongo'
-  },
-
-  /* ── Higher ─────────────────────────────────────────────────── */
-  {
-    src: '/images/higher-top-new-goya.webp',
-    alt: 'Top New Goya — Higher',
-    title: 'Higher',
-    subtitle: 'Top New Goya',
-    href: 'https://www.findclo.com/search?search=Higher'
-  },
-  {
-    src: '/images/higher-buzo-star.webp',
-    alt: 'Buzo Star — Higher',
-    title: 'Higher',
-    subtitle: 'Buzo Star',
-    href: 'https://www.findclo.com/product/41556'
-  },
-  {
-    src: '/images/higher-remera-club.webp',
-    alt: 'Remera Club — Higher',
-    title: 'Higher',
-    subtitle: 'Remera Club',
-    href: 'https://www.findclo.com/product/41427'
-  },
-
-  /* ── VCP ─────────────────────────────────────────────────────── */
-  {
-    src: '/images/vcp-body-mets.webp',
-    alt: 'Body Mets — VCP',
-    title: 'VCP',
-    subtitle: 'Body Mets',
-    href: 'https://www.findclo.com/search?search=VCP'
-  },
-
-  /* ── Vans ─────────────────────────────────────────────────────── */
+/* ─── Categorías Generales de Prendas ─── */
+const CATEGORIES = [
   {
     src: '/images/vans-hylane.jpg',
-    alt: 'Zapatillas U Hylane — Vans',
-    title: 'Vans',
-    subtitle: 'Zapatillas U Hylane',
-    href: 'https://www.findclo.com/search?search=Vans'
-  },
-
-  /* ── The North Face ───────────────────────────────────────────── */
-  {
-    src: '/images/tnf-thermoball-beige.jpg',
-    alt: 'Borcegos Thermoball Beige — The North Face',
-    title: 'The North Face',
-    subtitle: 'W Thermoball Lace Up WP',
-    href: 'https://www.findclo.com/search?search=The+North+Face'
+    alt: 'Zapatillas en Findclo',
+    title: 'ZAPATILLAS',
+    subtitle: 'Explorar zapatillas',
+    href: 'https://www.findclo.com/search?search=Zapatillas',
   },
   {
-    src: '/images/tnf-vectiv-enduris.jpg',
-    alt: 'Zapatillas Vectiv Enduris 4 — The North Face',
-    title: 'The North Face',
-    subtitle: 'W Vectiv Enduris 4',
-    href: 'https://www.findclo.com/search?search=The+North+Face'
-  },
-
-  /* ── Puma ─────────────────────────────────────────────────────── */
-  {
-    src: '/images/puma-fade-unisex.png',
-    alt: 'Zapatillas Fade Unisex — Puma',
-    title: 'Puma',
-    subtitle: 'Zapatillas Fade Unisex',
-    href: 'https://www.findclo.com/search?search=Puma'
+    src: '/images/kotk-campera-sakura.webp',
+    alt: 'Abrigos en Findclo',
+    title: 'ABRIGOS',
+    subtitle: 'Explorar abrigos y camperas',
+    href: 'https://www.findclo.com/search?search=Abrigos',
   },
   {
-    src: '/images/puma-class-remera.png',
-    alt: 'Remera Class — Puma',
-    title: 'Puma',
-    subtitle: 'Remera Class Hombre',
-    href: 'https://www.findclo.com/search?search=Puma'
-  },
-
-  /* ── Paz Cornu ────────────────────────────────────────────────── */
-  {
-    src: '/images/pazcornu-vestido-estany.webp',
-    alt: 'Vestido Estany — Paz Cornu',
-    title: 'Paz Cornu',
-    subtitle: 'Vestido Estany',
-    href: 'https://www.findclo.com/product/40990'
-  },
-  {
-    src: '/images/pazcornu-saco-san-remo.webp',
-    alt: 'Saco San Remo — Paz Cornu',
-    title: 'Paz Cornu',
-    subtitle: 'Saco San Remo',
-    href: 'https://www.findclo.com/product/40985'
+    src: '/images/category-jeans.jpg',
+    alt: 'Jeans en Findclo',
+    title: 'JEANS',
+    subtitle: 'Explorar jeans y denim',
+    href: 'https://www.findclo.com/search?search=Jeans',
   },
   {
     src: '/images/pazcornu-vestido-parissea.webp',
-    alt: 'Vestido Parissea — Paz Cornu',
-    title: 'Paz Cornu',
-    subtitle: 'Vestido Parissea',
-    href: 'https://www.findclo.com/product/40986'
+    alt: 'Vestidos en Findclo',
+    title: 'VESTIDOS',
+    subtitle: 'Explorar vestidos y monos',
+    href: 'https://www.findclo.com/search?search=Vestidos',
+  },
+  {
+    src: '/images/higher-buzo-star.webp',
+    alt: 'Buzos en Findclo',
+    title: 'BUZOS',
+    subtitle: 'Explorar buzos y hoodies',
+    href: 'https://www.findclo.com/search?search=Buzos',
+  },
+  {
+    src: '/images/category-accesorios.jpg',
+    alt: 'Accesorios en Findclo',
+    title: 'ACCESORIOS',
+    subtitle: 'Explorar accesorios',
+    href: 'https://www.findclo.com/search?search=Accesorios',
+  },
+  {
+    src: '/images/tnf-thermoball-beige.jpg',
+    alt: 'Botas en Findclo',
+    title: 'BOTAS',
+    subtitle: 'Explorar botas y borcegos',
+    href: 'https://www.findclo.com/search?search=Botas',
   },
 ]
 
 export default function CarouselSection() {
-  const [ref, visible] = useScrollReveal()
+  const sectionRef      = useRef(null)
+  const headerRef       = useRef(null)
+  const carouselWrapRef = useRef(null)
+
+  useEffect(() => {
+    const section      = sectionRef.current
+    const header       = headerRef.current
+    const carouselWrap = carouselWrapRef.current
+    if (!section || !header || !carouselWrap) return
+
+    const state = {
+      targetProgress: 0,
+      currentProgress: 0,
+      rafId: null,
+    }
+
+    function onScroll() {
+      const rect = section.getBoundingClientRect()
+      const viewH = window.innerHeight
+      const sectionH = section.offsetHeight
+      const totalSpan = sectionH + viewH
+      if (totalSpan <= 0) return
+
+      // Progress goes 0 -> 1 as section scrolls through viewport
+      const scrolled = Math.max(0, viewH - rect.top)
+      const progress = Math.min(1, Math.max(0, scrolled / totalSpan))
+      state.targetProgress = progress
+    }
+
+    function render() {
+      // 60-120fps continuous interpolation
+      const diff = state.targetProgress - state.currentProgress
+      if (Math.abs(diff) > 0.001) {
+        state.currentProgress += diff * 0.14
+      } else {
+        state.currentProgress = state.targetProgress
+      }
+
+      const p = state.currentProgress
+
+      // 1. Header Parallax: subtle vertical movement for 3D depth
+      const headerY = (p - 0.35) * -45
+      header.style.transform = `translate3d(0, ${headerY.toFixed(2)}px, 0)`
+
+      // 2. Carousel Parallax: active vertical floating travel decoupled from header
+      const carouselY = (p - 0.5) * -75
+      carouselWrap.style.transform = `translate3d(0, ${carouselY.toFixed(2)}px, 0)`
+
+      state.rafId = requestAnimationFrame(render)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+
+    onScroll()
+    state.currentProgress = state.targetProgress
+    state.rafId = requestAnimationFrame(render)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (state.rafId) cancelAnimationFrame(state.rafId)
+    }
+  }, [])
 
   return (
-    <section id="colecciones" className={styles.section}>
-      {/* Header */}
-      <div
-        ref={ref}
-        className={`${styles.header} ${visible ? styles.visible : ''}`}
-      >
-        <p className={styles.label}>Colecciones</p>
+    <section ref={sectionRef} id="colecciones" className={styles.section}>
+      {/* Ambient background emerald glow */}
+      <div className={styles.ambientGlow} aria-hidden="true" />
+
+      {/* Header with Smooth Parallax */}
+      <div ref={headerRef} className={styles.header}>
+        <p className={styles.label}>Explorá</p>
         <h2 className={styles.heading}>
-          DESCUBRÍ<br />LO QUE HAY
+          HAY MÁS<br />
+          PARA ENCONTRAR.
         </h2>
         <p className={styles.sub}>
-          Más de 30 marcas, un solo lugar. Swipeá para explorar.
+          Categorías, marcas y miles de productos.<br />
+          Todo en un solo lugar.
         </p>
       </div>
 
-      {/* Coverflow */}
-      <div className={`${styles.carouselWrap} ${visible ? styles.carouselVisible : ''}`}>
+      {/* Coverflow Carousel with Fluid Decoupled Parallax */}
+      <div ref={carouselWrapRef} className={styles.carouselWrap}>
         <CoverflowCarousel
-          slides={SLIDES}
-          showCaption
+          slides={CATEGORIES}
+          showCaption={false}
           showNavigation
           showPagination
-          cardWidth="clamp(180px, 24vw, 300px)"
-          rotate={44}
-          depth={0.55}
-          fade={0.12}
-          label="Colecciones de ropa findclo"
+          cardWidth="clamp(200px, 25vw, 320px)"
+          rotate={40}
+          depth={0.5}
+          fade={0.15}
+          label="Categorías de prendas en Findclo"
         />
       </div>
     </section>

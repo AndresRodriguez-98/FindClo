@@ -298,13 +298,18 @@ export function CoverflowCarousel({
                 >
                   <img
                     src={slide.src}
-                    alt={slide.alt}
+                    alt={slide.alt || slide.title}
                     draggable={false}
                     className={[
                       styles.cardImg,
                       isOpen ? styles.cardImgDimmed : '',
                     ].filter(Boolean).join(' ')}
                   />
+
+                  {/* ── Category label at bottom of card ── */}
+                  <div className={styles.cardCategoryBar}>
+                    <span className={styles.cardCategoryName}>{slide.title}</span>
+                  </div>
 
                   {/* ── Overlay ──────────────────────────── */}
                   <div

@@ -1,0 +1,501 @@
+/* ──────────────────────────────────────────────────
+   ForBrands.module.css
+   Apple-Style Scrollytelling Section for "Para Marcas"
+────────────────────────────────────────────────── */
+
+/* ── Section Shell ──────────────────────────────────────────
+   BUG FIX: removed overflow: clip.
+   overflow: clip can cause position:sticky children to stick
+   relative to the section's overflow box instead of the viewport
+   in some browser implementations, resulting in a static image.
+   The ambient glow overflow is handled via its own containment.
+──────────────────────────────────────────────────────────── */
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 280vh;
+  background: var(--brands-bg);
+  border-top: 1px solid var(--brands-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ── Ambient Glow ───────────────────────────────── */
+.ambientGlow {
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 800px;
+  max-height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 168, 130, 0.14) 0%,
+    rgba(0, 98, 81, 0.05) 45%,
+    transparent 70%
+  );
+  filter: blur(95px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Main Container (52% left narrative / 48% right sticky canvas) ── */
+.container {
+  position: relative;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 52fr 48fr;
+  min-height: 100%;
+}
+
+/* ═══════════════════════════════════════
+   LEFT COLUMN: Narrative Blocks
+════════════════════════════════════════ */
+.leftCol {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16vh;
+  padding: 14vh 4.5vw 18vh 4.5vw;
+}
+
+/* Narrative Block with comfortable height */
+.narrativeBlock {
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Label */
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--brands-label);
+  transition: color 0.3s ease;
+}
+
+/* Heading H2 */
+.heading {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 3.8vw, 3.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--brands-heading);
+  transition: color 0.3s ease;
+}
+
+.headingAccent {
+  color: var(--color-brand-light);
+}
+
+/* Description */
+.description {
+  font-family: var(--font-sans);
+  font-size: clamp(0.98rem, 1.25vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--brands-body);
+  max-width: 48ch;
+  transition: color 0.3s ease;
+}
+
+/* Section Header for Blocks 2 and 3 */
+.blockHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.blockSub {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brands-label);
+}
+
+.blockTitle {
+  font-family: var(--font-sans);
+  font-size: clamp(1.45rem, 2.2vw, 2.1rem);
+  font-weight: 800;
+  color: var(--brands-heading);
+  letter-spacing: -0.02em;
+}
+
+/* ── Benefits Grid (2x2) ────────────────────────── */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+}
+
+.benefitCard {
+  position: relative;
+  background: var(--brands-card-bg);
+  border: 1px solid var(--brands-border);
+  border-radius: 16px;
+  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.benefitCard:hover {
+  border-color: rgba(0, 168, 130, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 168, 130, 0.12);
+}
+
+/* Mouse-tracking spotlight */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 168, 130, 0.14) 0%,
+    transparent 80%
+  );
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.benefitCard:hover .spotlight {
+  opacity: 1;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.cardIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 168, 130, 0.35);
+  background: rgba(0, 168, 130, 0.08);
+  color: var(--brands-label);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.benefitCard:hover .cardIcon {
+  border-color: var(--color-brand-light);
+  background: rgba(0, 168, 130, 0.16);
+  box-shadow: 0 0 16px rgba(0, 168, 130, 0.3);
+  transform: scale(1.08);
+}
+
+.cardNum {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--brands-label);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.cardTitle {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--brands-card-title);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.cardBody {
+  font-family: var(--font-sans);
+  font-size: clamp(0.78rem, 0.95vw, 0.88rem);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--brands-card-body);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.cardNote {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--brands-label);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(0, 168, 130, 0.45);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+/* ── Metrics Grid (Bloque 3) ────────────────────── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+}
+
+.metricCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem 1.4rem;
+  background: var(--brands-card-bg);
+  border: 1px solid var(--brands-border);
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.metricCard:hover {
+  border-color: rgba(0, 168, 130, 0.4);
+  transform: translateY(-2px);
+}
+
+.metricIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 168, 130, 0.35);
+  background: rgba(0, 168, 130, 0.08);
+  color: var(--brands-label);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.metricCard:hover .metricIcon {
+  border-color: var(--color-brand-light);
+  background: rgba(0, 168, 130, 0.16);
+  box-shadow: 0 0 16px rgba(0, 168, 130, 0.28);
+  transform: scale(1.08);
+}
+
+.metricContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metricTitle {
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brands-card-title);
+  line-height: 1.25;
+  transition: color 0.3s ease;
+}
+
+.metricDesc {
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 0.85vw, 0.8rem);
+  font-weight: 400;
+  color: var(--brands-card-body);
+  line-height: 1.45;
+  transition: color 0.3s ease;
+}
+
+/* ── CTA Block ──────────────────────────────────── */
+.ctaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: fit-content;
+  padding: 0.95rem 2.2rem;
+  border: 1.8px solid var(--brands-cta-border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--brands-cta-text);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 168, 130, 0.18);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    gap 0.25s ease,
+    transform 0.25s ease;
+}
+
+.ctaBtn:hover {
+  background: var(--brands-cta-bg-hover);
+  color: var(--brands-cta-text-hover);
+  border-color: var(--color-brand);
+  box-shadow: 0 0 30px rgba(0, 168, 130, 0.35), 0 4px 16px rgba(0, 98, 81, 0.25);
+  gap: 1rem;
+  transform: translateY(-2px);
+}
+
+.arrow {
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.ctaBtn:hover .arrow {
+  transform: translateX(4px);
+}
+
+.ctaNote {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--brands-card-body);
+  padding-left: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+/* ═══════════════════════════════════════
+   RIGHT COLUMN: Sticky Animated Canvas
+   BUG FIX: align-self: start prevents the grid from stretching
+   the column height to match the left (which would make sticky
+   have no scrolling room within the grid track).
+   The sticky element needs a taller grid track than itself —
+   align-self: start gives the element its natural height (100dvh)
+   while the grid track is determined by the left column (280vh+).
+════════════════════════════════════════ */
+.rightCol {
+  position: sticky;
+  top: 0;
+  align-self: start;      /* critical: don't stretch to fill grid track */
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: contents;
+}
+
+.canvasVignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    transparent 65%,
+    rgba(5, 5, 5, 0.6) 100%
+  );
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE (Mobile / Tablet)
+════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .section {
+    min-height: auto;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .rightCol {
+    position: sticky;
+    top: 0;
+    height: 48vh;
+    z-index: 10;
+    border-bottom: 1px solid var(--brands-border);
+    background: var(--brands-bg);
+  }
+
+  .leftCol {
+    padding: 6vh 6vw 10vh;
+    gap: 10vh;
+  }
+
+  .narrativeBlock {
+    min-height: auto;
+  }
+
+  .heading {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .leftCol {
+    padding: 5vh 5vw 8vh;
+    gap: 8vh;
+  }
+
+  .benefitsGrid,
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}

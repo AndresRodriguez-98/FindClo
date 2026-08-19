@@ -1,6 +1,6 @@
 import styles from './ProductsMarquee.module.css'
 
-// Brands: logo via Simple Icons CDN where available, otherwise SVG text mark
+// Brands: logo via Simple Icons CDN where available, otherwise clean styled text mark
 const brands = [
   {
     name: 'Nike',
@@ -13,8 +13,18 @@ const brands = [
     type: 'img',
   },
   {
-    name: 'King Of The Kongo',
+    name: 'Zara',
+    logo: 'https://cdn.simpleicons.org/zara/6b7280',
+    type: 'img',
+  },
+  {
+    name: 'Mango',
     type: 'text',
+  },
+  {
+    name: "Levi's",
+    logo: 'https://cdn.simpleicons.org/levis/6b7280',
+    type: 'img',
   },
   {
     name: 'Puma',
@@ -22,7 +32,25 @@ const brands = [
     type: 'img',
   },
   {
-    name: 'Ona Saez',
+    name: 'The North Face',
+    logo: 'https://cdn.simpleicons.org/thenorthface/6b7280',
+    type: 'img',
+  },
+  {
+    name: 'Vans',
+    logo: 'https://cdn.simpleicons.org/vans/6b7280',
+    type: 'img',
+  },
+  {
+    name: 'Jordan',
+    type: 'text',
+  },
+  {
+    name: 'Rapsodia',
+    type: 'text',
+  },
+  {
+    name: 'King Of The Kongo',
     type: 'text',
   },
   {
@@ -31,17 +59,9 @@ const brands = [
     type: 'img',
   },
   {
-    name: '47 Street',
-    type: 'text',
-  },
-  {
     name: 'Lacoste',
     logo: 'https://cdn.simpleicons.org/lacoste/6b7280',
     type: 'img',
-  },
-  {
-    name: 'Rapsodia',
-    type: 'text',
   },
   {
     name: 'Converse',
@@ -62,7 +82,9 @@ function BrandItem({ name, logo, type }) {
           onError={e => {
             // Fallback to text if CDN fails
             e.currentTarget.style.display = 'none'
-            e.currentTarget.nextSibling?.style && (e.currentTarget.nextSibling.style.display = 'inline')
+            if (e.currentTarget.nextSibling?.style) {
+              e.currentTarget.nextSibling.style.display = 'inline'
+            }
           }}
         />
         <span className={styles.brandText} style={{ display: 'none' }}>{name}</span>
