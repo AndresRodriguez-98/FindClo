@@ -256,7 +256,8 @@
 @media (max-width: 900px) {
   .inner {
     grid-template-columns: 1fr auto;
-    padding: 0 1.25rem;
+    /* Safe-area: respect iOS notch on the sides */
+    padding: 0 max(1.25rem, env(safe-area-inset-right)) 0 max(1.25rem, env(safe-area-inset-left));
     height: 64px;
   }
   .nav {
@@ -265,14 +266,48 @@
   .logoText {
     font-size: 1.65rem;
   }
+
+  /* ── Touch Targets (Apple HIG: ≥ 44×44px) ──────
+     Small interactive elements are the #1 usability
+     failure on mobile. Set explicit min sizes here.
+  ─────────────────────────────────────────────── */
   .ctaBtn {
-    padding: 0.45rem 0.95rem;
+    min-height: 44px;
+    padding: 0 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
   }
   .ctaText {
     font-size: 0.7rem;
   }
+
+  /* Theme toggle: grow to 44×44 tap area */
   .themeToggleBtn {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
   }
 }
+
+/* Tiny phones (≤ 380px): hide CTA label, keep arrow + border */
+@media (max-width: 380px) {
+  .ctaText {
+    /* Visually hidden but accessible */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  .ctaBtn {
+    padding: 0 0.85rem;
+  }
+  .ctaArrow {
+    font-size: 1.1rem;
+  }
+}
+

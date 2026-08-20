@@ -137,20 +137,21 @@
   --footer-text:       #6b7280;
   --footer-text-hover: #006251;
 
-  /* For Brands (Para Marcas) — always dark themed */
-  --brands-bg:              #0a0a0a;
-  --brands-border:          rgba(255, 255, 255, 0.08);
-  --brands-label:           #00a882;
-  --brands-heading:         #ffffff;
-  --brands-body:            rgba(255, 255, 255, 0.55);
-  --brands-card-bg:         rgba(18, 18, 18, 0.9);
-  --brands-card-hover:      rgba(0, 168, 130, 0.04);
-  --brands-card-title:      #ffffff;
-  --brands-card-body:       rgba(255, 255, 255, 0.5);
-  --brands-cta-border:      rgba(0, 168, 130, 0.6);
-  --brands-cta-text:        #00a882;
-  --brands-cta-bg-hover:    rgba(0, 98, 81, 0.18);
-  --brands-cta-text-hover:  #ffffff;
+  /* For Brands (Para Marcas) — Light Mode */
+  --brands-bg:              #f8faf9;
+  --brands-border:          rgba(0, 0, 0, 0.07);
+  --brands-label:           #006251;
+  --brands-heading:         #0a0a0a;
+  --brands-body:            #4b5563;
+  --brands-card-bg:         #ffffff;
+  --brands-card-hover:      rgba(0, 98, 81, 0.04);
+  --brands-card-title:      #0a0a0a;
+  --brands-card-body:       #6b7280;
+  --brands-cta-border:      rgba(0, 98, 81, 0.55);
+  --brands-cta-text:        #006251;
+  --brands-cta-bg-hover:    rgba(0, 98, 81, 0.08);
+  --brands-cta-text-hover:  #004840;
+  --brands-mobile-overlay:  linear-gradient(105deg, rgba(248, 250, 249, 0.94) 0%, rgba(248, 250, 249, 0.85) 55%, rgba(248, 250, 249, 0.65) 100%);
 
   /* Spacing & shape */
   --font-display: 'Druk Wide', 'Impact', 'Haettenschweiler', 'Arial Black', sans-serif;
@@ -288,6 +289,7 @@
   --brands-cta-text:        #00a882;
   --brands-cta-bg-hover:    rgba(0, 98, 81, 0.22);
   --brands-cta-text-hover:  #ffffff;
+  --brands-mobile-overlay:  linear-gradient(105deg, rgba(5, 5, 5, 0.90) 0%, rgba(5, 5, 5, 0.80) 55%, rgba(5, 5, 5, 0.55) 100%);
 }
 
 /* ─────────────────────────────────────────

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Findclo — Toda la moda. Un solo lugar.</title>
     <meta name="description" content="Findclo — La plataforma creada para reunir y simplificar la forma de descubrir moda." />
-    <!-- Prevent Theme Flash (FOUC) -->
+    <!-- Prevent Theme Flash (FOUC)
+         Logic: dark is default for all new visitors.
+         Only switch to light if the user previously saved 'light'
+         explicitly in localStorage (meaning they toggled it manually). -->
     <script>
       (function() {
         try {
           const stored = localStorage.getItem('findclo_theme');
-          const theme = stored ? stored : 'light';
+          // 'dark' unless the user explicitly chose 'light'
+          const theme = stored === 'light' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', theme);
           if (theme === 'dark') {
             document.documentElement.classList.add('dark');

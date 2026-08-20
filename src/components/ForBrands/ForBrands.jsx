@@ -80,10 +80,14 @@ export default function ForBrands() {
 
     /* ── Canvas sizing ─────────────────────────────────── */
     function resizeCanvas() {
-      const dpr      = Math.min(window.devicePixelRatio || 1, 2)
-      const isMobile = window.innerWidth <= 1024
-      const w        = isMobile ? window.innerWidth : Math.round(window.innerWidth * 0.48)
-      const h        = isMobile ? Math.round(window.innerHeight * 0.48) : window.innerHeight
+      const dpr    = Math.min(window.devicePixelRatio || 1, 2)
+      const parent = canvas.parentElement
+
+      // Always measure the actual container — on mobile the rightCol
+      // is now full-width sticky (not fixed), so parent.clientWidth === vw.
+      // On desktop it's the 52fr column. No hardcoded fractions needed.
+      const w = parent ? parent.clientWidth  : window.innerWidth
+      const h = window.innerHeight
 
       canvas.width        = Math.round(w * dpr)
       canvas.height       = Math.round(h * dpr)
@@ -154,7 +158,7 @@ export default function ForBrands() {
       const sectionH = section.offsetHeight
       const viewH    = window.innerHeight
 
-      const totalSpan = sectionH + viewH * 0.2
+      const totalSpan = sectionH
       if (totalSpan <= 0) return
 
       const scrolled = Math.max(0, viewH - rect.top)

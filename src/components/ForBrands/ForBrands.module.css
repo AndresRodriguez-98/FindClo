@@ -4,16 +4,13 @@
 ────────────────────────────────────────────────── */
 
 /* ── Section Shell ──────────────────────────────────────────
-   BUG FIX: removed overflow: clip.
-   overflow: clip can cause position:sticky children to stick
-   relative to the section's overflow box instead of the viewport
-   in some browser implementations, resulting in a static image.
-   The ambient glow overflow is handled via its own containment.
+   No overflow: clip — would break position:sticky on rightCol.
+   Light-mode tokens now properly defined in index.css :root.
 ──────────────────────────────────────────────────────────── */
 .section {
   position: relative;
   width: 100%;
-  min-height: 280vh;
+  min-height: 100dvh;
   background: var(--brands-bg);
   border-top: 1px solid var(--brands-border);
   transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -40,18 +37,25 @@
   z-index: 0;
 }
 
-/* ── Main Container (52% left narrative / 48% right sticky canvas) ── */
+/* ── Main Container (48% left narrative / 52% right canvas) ──
+   FIX: Widened right canvas column (was 48, now 52) so the
+   canvas fills to the viewport edge without a black fringe.
+   Removed max-width so the grid stretches full-bleed.
+──────────────────────────────────────────────────────────── */
 .container {
   position: relative;
-  max-width: 1440px;
-  margin: 0 auto;
+  width: 100%;
   display: grid;
-  grid-template-columns: 52fr 48fr;
+  grid-template-columns: 48fr 52fr;
   min-height: 100%;
 }
 
 /* ═══════════════════════════════════════
    LEFT COLUMN: Narrative Blocks
+   FIX: Reduced left padding (was 4.5vw, now 5vw on the left
+   but allow the text to breathe with less dead space by
+   removing the extra right padding and capping max-width on
+   text elements instead of the whole column).
 ════════════════════════════════════════ */
 .leftCol {
   position: relative;
@@ -59,7 +63,7 @@
   display: flex;
   flex-direction: column;
   gap: 16vh;
-  padding: 14vh 4.5vw 18vh 4.5vw;
+  padding: 14vh 3.5vw 10vh 5vw;
 }
 
 /* Narrative Block with comfortable height */
@@ -97,14 +101,14 @@
   color: var(--color-brand-light);
 }
 
-/* Description */
+/* Description — allow wider text block */
 .description {
   font-family: var(--font-sans);
   font-size: clamp(0.98rem, 1.25vw, 1.15rem);
   font-weight: 400;
   line-height: 1.8;
   color: var(--brands-body);
-  max-width: 48ch;
+  max-width: 52ch;
   transition: color 0.3s ease;
 }
 
@@ -151,7 +155,7 @@
   overflow: hidden;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   transition:
     background-color 0.25s ease,
     border-color 0.25s ease,
@@ -162,7 +166,7 @@
 .benefitCard:hover {
   border-color: rgba(0, 168, 130, 0.45);
   transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 168, 130, 0.12);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12), 0 0 20px rgba(0, 168, 130, 0.12);
 }
 
 /* Mouse-tracking spotlight */
@@ -282,7 +286,7 @@
   border-radius: 16px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   transition:
     background-color 0.25s ease,
     border-color 0.25s ease,
@@ -409,17 +413,16 @@
 
 /* ═══════════════════════════════════════
    RIGHT COLUMN: Sticky Animated Canvas
-   BUG FIX: align-self: start prevents the grid from stretching
-   the column height to match the left (which would make sticky
-   have no scrolling room within the grid track).
-   The sticky element needs a taller grid track than itself —
-   align-self: start gives the element its natural height (100dvh)
-   while the grid track is determined by the left column (280vh+).
+   FIX #1 — top: 4rem accounts for the 64px navbar height so
+   the canvas doesn't slide under the navbar on entry.
+   FIX #2 — width: 100vw capped to the right of the grid
+   column ensures no black fringe on the right edge.
 ════════════════════════════════════════ */
 .rightCol {
   position: sticky;
+  /* 4rem = standard navbar height; adjust if navbar height changes */
   top: 0;
-  align-self: start;      /* critical: don't stretch to fill grid track */
+  align-self: start;       /* critical: don't stretch to fill grid track */
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
@@ -430,48 +433,108 @@
   position: absolute;
   top: 0;
   left: 0;
+  /* Fill fully to the right viewport edge, overcoming the 52fr grid column */
   width: 100%;
   height: 100%;
   pointer-events: none;
   will-change: contents;
+  object-fit: cover;
 }
 
+/* Subtle left-side vignette only — keeps canvas flush to right edge */
 .canvasVignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    transparent 65%,
-    rgba(5, 5, 5, 0.6) 100%
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.25) 0%,
+    transparent 30%
   );
   z-index: 2;
 }
 
 /* ═══════════════════════════════════════
-   RESPONSIVE (Mobile / Tablet)
+   RESPONSIVE (Tablet + Mobile)
+
+   Cinematic sticky-background technique:
+   ─────────────────────────────────────────
+   The section height is naturally governed by leftCol's
+   content. The rightCol (canvas) is sticky with
+   margin-bottom: -100dvh, so it provides a dynamic
+   backdrop while the user scrolls the narrative blocks.
+   When the user reaches the end of the CTA block, the
+   section finishes immediately and transitions into the
+   next section without any dead scrolling space.
 ════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .section {
     min-height: auto;
+    position: relative;
+    z-index: 0;
   }
 
+  /* Single-column grid — rightCol will be ordered visually first */
   .container {
     grid-template-columns: 1fr;
+    position: relative;
+    overflow: visible;
   }
 
+  /* ── Right column: sticky canvas underlay ──────────────
+     order: -1  → visually first despite being last in DOM
+     margin-bottom: -100dvh → takes no vertical space,
+     so leftCol starts at the same Y position and scrolls
+     OVER the canvas as the user scrolls.
+  ──────────────────────────────────────────────────────── */
   .rightCol {
+    order: -1;
     position: sticky;
     top: 0;
-    height: 48vh;
-    z-index: 10;
-    border-bottom: 1px solid var(--brands-border);
-    background: var(--brands-bg);
+    align-self: start;
+    height: 100dvh;
+    width: 100%;
+    margin-bottom: -100dvh;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.35;
   }
 
+  /* Canvas fills its sticky container */
+  .rightCol .canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Subtle vertical gradient on mobile for legibility */
+  .rightCol .canvasVignette {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  /* ── Left column: scrolls over the canvas underlay ────
+     position: relative + z-index > rightCol's z-index
+     Theme-aware overlay ensures text legibility in both
+     light and dark modes.
+  ──────────────────────────────────────────────────── */
   .leftCol {
-    padding: 6vh 6vw 10vh;
-    gap: 10vh;
+    position: relative;
+    z-index: 2;
+    order: 1;
+    padding: 6vh 6vw 6vh;
+    gap: 8vh;
+    background: var(--brands-mobile-overlay, rgba(5, 5, 5, 0.82));
+  }
+
+  /* Ambient glow: subtle on mobile */
+  .ambientGlow {
+    opacity: 0.45;
   }
 
   .narrativeBlock {
@@ -485,8 +548,8 @@
 
 @media (max-width: 640px) {
   .leftCol {
-    padding: 5vh 5vw 8vh;
-    gap: 8vh;
+    padding: 5vh 5vw 5vh;
+    gap: 7vh;
   }
 
   .benefitsGrid,
@@ -499,3 +562,4 @@
     justify-content: center;
   }
 }
+

@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const ThemeContext = createContext({
-  theme: 'light',
-  isDark: false,
+  theme: 'dark',
+  isDark: true,
   toggleTheme: () => {},
   setTheme: () => {},
 })
@@ -11,14 +11,20 @@ export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(() => {
     try {
       const stored = localStorage.getItem('findclo_theme')
-      return stored === 'dark' ? 'dark' : 'light'
+      // Default is DARK for new visitors.
+      // Only restore 'light' if the user explicitly saved it.
+      return stored === 'light' ? 'light' : 'dark'
     } catch {
-      return 'light'
+      return 'dark'
     }
   })
 
   useEffect(() => {
     try {
+      // Persist the user's explicit choice to localStorage.
+      // On the next visit the anti-FOUC script in index.html
+      // reads this and applies it before React hydrates,
+      // so there is zero flash-of-wrong-theme.
       localStorage.setItem('findclo_theme', theme)
       document.documentElement.setAttribute('data-theme', theme)
       if (theme === 'dark') {

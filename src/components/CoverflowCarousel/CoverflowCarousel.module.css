@@ -211,6 +211,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Minimum 44×44 touch target per Apple HIG */
+  min-width: 44px;
+  min-height: 44px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   transition:
     background-color 0.2s ease,
@@ -274,6 +277,7 @@
 }
 
 .dot {
+  /* Visual size */
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
@@ -282,9 +286,40 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
   padding: 0;
+  /* Invisible tap target expansion — meets 44px without
+     changing the visual design */
+  position: relative;
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
 }
 
 .dotActive {
   background: var(--carousel-dot-active);
   transform: scale(1.4);
 }
+
+/* ══════════════════════════════════════
+   MOBILE — Carousel touch improvements
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Pull arrows closer to cards on small screens so they
+     don't overlap edge content */
+  .navBtnLeft  { left:  0.35rem; }
+  .navBtnRight { right: 0.35rem; }
+
+  /* Slightly smaller arrow icon but keep 44px target */
+  .navBtn {
+    padding: 0.35rem;
+  }
+
+  /* Add breathing room so the 3D cards don't clip against
+     the safe-area on iPhone SE/mini */
+  .frame {
+    padding: 2.5rem 0;
+  }
+}
+

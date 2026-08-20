@@ -37,6 +37,9 @@
   position: relative;
   z-index: 1;
   max-width: 860px;
+  /* Prevent the parallax transform from creating a horizontal
+     scrollbar when the header slides up/down */
+  width: 100%;
   margin-bottom: 8vh;
   will-change: transform;
 }
@@ -52,13 +55,23 @@
   transition: color 0.3s ease;
 }
 
+/* ── Heading — Druk Wide Bold display type ──────
+   FIX: The minimum of clamp() was 2.6rem which caused
+   "ENCONTRAR" to clip off the right edge on mobile.
+   New minimum = 1.9rem keeps all 3 words on screen
+   even at 320px viewport width.
+   overflow-wrap + word-break are safety nets.
+──────────────────────────────────────────────── */
 .heading {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.6rem, 7vw, 8.5rem);
-  line-height: 0.92;
+  font-size: clamp(1.9rem, 7vw, 8.5rem);
+  line-height: 0.96;
   letter-spacing: -0.015em;
   color: var(--carousel-heading);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
   transition: color 0.3s ease;
 }
 
@@ -77,3 +90,40 @@
   z-index: 1;
   will-change: transform, opacity;
 }
+
+/* ══════════════════════════════════════════
+   MOBILE OVERRIDES (≤ 640px)
+   - Disable parallax transforms that cause
+     layout jitter on small viewports
+   - Tighten section padding for safe-area
+   - Let heading breathe at natural size
+══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .section {
+    padding: 10vh 5vw 8vh;
+    /* Prevent any child from bleeding past right edge */
+    overflow-x: hidden;
+  }
+
+  .header {
+    /* Disable parallax translate on mobile — the RAF loop
+       still runs, but CSS will-change: transform is kept;
+       the JS will keep applying, so just guard with max-width */
+    max-width: 100%;
+    margin-bottom: 6vh;
+  }
+
+  .heading {
+    /* At 375px: 1.9rem = 30.4px — "HAY MÁS" fits on one line,
+       "PARA" on second, "ENCONTRAR" on third. All visible. */
+    font-size: clamp(1.9rem, 8.5vw, 3.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+  }
+
+  .sub {
+    font-size: 0.92rem;
+    margin-top: 1.2rem;
+  }
+}
+

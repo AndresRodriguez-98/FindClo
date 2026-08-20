@@ -24,7 +24,7 @@ export default function FinalCtaSection() {
           <div className={styles.badgesWrap}>
             {/* App Store Badge */}
             <a
-              href="https://apple.com"
+              href="https://apps.apple.com/ar/app/findclo/id6771854973"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.storeBadge}
@@ -41,7 +41,7 @@ export default function FinalCtaSection() {
 
             {/* Google Play Badge */}
             <a
-              href="https://play.google.com"
+              href="https://play.google.com/store/search?q=findclo&c=apps"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.storeBadge}
