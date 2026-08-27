@@ -1,5 +1,9 @@
-/* ScrollSequence.module.css */
+/* ──────────────────────────────────────────────────
+   ScrollSequence.module.css
+   Ambient Background Hero — Dual Canvas Architecture
+   ────────────────────────────────────────────────── */
 
+/* ── Scroll container (drives sticky + scroll math) ── */
 .scrollContainer {
   position: relative;
   width: 100%;
@@ -7,14 +11,13 @@
   touch-action: pan-y;
 }
 
-/* Mobile: altura mucho más compacta para que baje en 1 o 2 swipes con el dedo */
 @media (max-width: 768px) {
   .scrollContainer {
     height: 175vh;
   }
 }
 
-/* Sticky viewport keeps the canvas pinned while the parent scrolls */
+/* ── Sticky viewport: the visible window ─────────── */
 .stickyViewport {
   position: sticky;
   top: 0;
@@ -22,14 +25,85 @@
   width: 100vw;
   height: 100dvh;
   overflow: hidden;
-  background-color: var(--color-bg);
+  /* Dark fallback while frames load */
+  background: #080808;
 }
 
-.canvas {
+/* ══════════════════════════════════════════════════
+   LAYER 1 — AMBIENT BACKGROUND CANVAS
+   ══════════════════════════════════════════════════
+   Same canvas drawn cover-scaled, then:
+   • CSS blur makes it soft and cinematic
+   • ::after overlay darkens it to ~40% brightness
+   • z-index: 0 — sits at the very back
+   ══════════════════════════════════════════════════ */
+.bgCanvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 0;
+
+  /* ── The cinematic effect: ────────────────────────
+     blur(55px)         — heavy defocus
+     saturate(1.3)      — push colors slightly to avoid
+                          the desaturated look heavy blur
+                          produces
+     brightness(0.38)   — darken so fg frame pops and
+                          hero text stays legible
+  ─────────────────────────────────────────────────── */
+  filter: blur(55px) saturate(1.3) brightness(0.38);
+
+  /* Overscan: the blur creates a ~30px halo at edges.
+     Scale slightly to hide the halo without clipping
+     the actual content. */
+  transform: scale(1.08);
+  transform-origin: center center;
+}
+
+/* ══════════════════════════════════════════════════
+   LAYER 2 — FOREGROUND FRAME CANVAS
+   ══════════════════════════════════════════════════
+   Contain-scaled frame (9:16) centered in the viewport.
+   Clean, no filter. Above the background, below children.
+   ══════════════════════════════════════════════════ */
+.fgCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Subtle vignette around the fg canvas edges ──
+   Helps the fg frame blend into the ambient bg
+   rather than looking pasted on top of it.
+   Applied as a pseudo-element on the viewport.  */
+.stickyViewport::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 75% 85% at center,
+    transparent 45%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* ── Children (HeroOverlay text) sit above everything ─
+   IMPORTANT: do NOT set position:relative here.
+   The HeroOverlay uses position:absolute + inset:0 to
+   fill the full stickyViewport. Overriding it with
+   position:relative would break that fill and create
+   a blank strip at the bottom.
+   We only need to ensure the z-index is above the
+   canvases (z-index 0 and 1) and the vignette (z-index 2).
+   The HeroOverlay's own CSS already declares z-index:10.
+   ─────────────────────────────────────────────────── */
+.stickyViewport > :not(.bgCanvas):not(.fgCanvas) {
+  z-index: 10;
 }

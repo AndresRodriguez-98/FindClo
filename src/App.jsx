@@ -44,7 +44,7 @@ export default function App() {
           {/* 5. Marcas en Findclo */}
           <ProductsMarquee />
 
-          {/* 6. Footer & CTA de Cierre con Celular Horizontal */}
+          {/* 6. Footer & CTA de Cierre */}
           <FinalCtaSection />
         </main>
       </div>

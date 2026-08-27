@@ -54,7 +54,7 @@ const benefits = [
 const metrics = [
   { icon: Users,     title: 'USUARIOS CALIFICADOS', desc: 'Interesados realmente en moda y nuevas tendencias.' },
   { icon: BarChart3, title: 'TRÁFICO DIRECTO',      desc: 'A tu ecommerce oficial, sin intermediarios.' },
-  { icon: Target,    title: 'MAYOR ALCANCE',        desc: 'Nuevos clientes que todavía no conocen tu marca.' },
+  { icon: Target,    title: 'MAYOR ALCANCE',        desc: 'Nuevos clientes que todavía no conocen tu marca y/o productos.' },
   { icon: Percent,   title: 'COSTOS OPTIMIZADOS',   desc: 'Invertí mejor, con foco directo en resultados.' },
 ]
 
@@ -258,7 +258,7 @@ export default function ForBrands() {
             </div>
             <div className={styles.ctaBlock}>
               <a
-                href="https://findclo.com/brands"
+                href="https://www.findclo.com/signup?tipo=marca"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.ctaBtn}

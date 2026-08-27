@@ -1,45 +1,76 @@
-/* ── FinalCtaSection.module.css — Horizontal Phone Footer ── */
+/* ── FinalCtaSection.module.css — Redesigned Footer Banner ── */
 
+/* ── Section shell ───────────────────────────────── */
 .section {
   position: relative;
   background: var(--color-bg);
   border-top: 1px solid var(--color-border);
-  padding: 8vh 6vw 4vh; /* Much less tall as requested */
+  /* Balanced vertical rhythm */
+  padding: 6vh 0 4vh;
   overflow: hidden;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* ── Ambient Background Lighting ── */
+/* ── Ambient green glow — centered bottom ─────────── */
 .ambientGlow {
   position: absolute;
-  bottom: -30%;
+  bottom: -20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80vw;
-  height: 40vw;
+  width: 70vw;
+  height: 35vw;
   max-width: 900px;
-  max-height: 450px;
+  max-height: 400px;
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 168, 130, 0.16) 0%,
-    rgba(0, 98, 81, 0.06) 50%,
+    rgba(0, 168, 130, 0.14) 0%,
+    rgba(0, 98, 81, 0.05) 55%,
     transparent 75%
   );
-  filter: blur(80px);
+  filter: blur(70px);
   pointer-events: none;
   z-index: 0;
 }
 
+/* ── Subtle typographic grid texture on the left side ─
+   Very faint grid lines give the empty space a premium
+   editorial feel without distracting from the text.    */
+.bgTexture {
+  position: absolute;
+  inset: 0;
+  width: 40%;          /* Only the left third */
+  pointer-events: none;
+  z-index: 0;
+  /* Fine cross-hatch: 40×40px cell, 1px lines at ~2% opacity */
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 36px 36px;
+  /* Mask: full opacity at far left, fades toward center */
+  mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.9) 0%, transparent 100%);
+}
+
+/* Light mode: lower opacity texture */
+[data-theme="light"] .bgTexture {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+}
+
+/* ── 3-column grid — equal pillars, phone column narrower ─ */
 .container {
   position: relative;
   z-index: 1;
-  max-width: 1400px;
+  max-width: 1280px;
   margin: 0 auto;
+  padding: 0 5vw;
   display: grid;
-  grid-template-columns: 1fr 1.3fr 1fr; /* Center horizontal phone has comfortable breathing room */
+  /* Slightly more room for the text pillars vs the phone */
+  grid-template-columns: 1fr 0.6fr 1fr;
   align-items: center;
-  gap: 3.5vw;
+  gap: 4vw;
   opacity: 0;
   transform: translateY(30px);
   transition:
@@ -53,22 +84,26 @@
 }
 
 /* ══════════════════════════════════
-   COLUMNA IZQUIERDA: APP DOWNLOAD
+   LEFT COLUMN: Tagline
+   Exact same visual weight & size as right column
 ══════════════════════════════════ */
 .leftCol {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.appTitle {
+.appTitle,
+.ctaHeading {
   font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: clamp(1.4rem, 2vw, 2.1rem);
-  line-height: 1.16;
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  font-size: clamp(1.85rem, 2.6vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--color-text-primary);
+  margin: 0;
   transition: color 0.3s ease;
 }
 
@@ -76,322 +111,163 @@
   color: var(--color-brand-light);
 }
 
+/* ══════════════════════════════════════════
+   CENTER COLUMN: Real phone product photo
+══════════════════════════════════════════ */
+.centerCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Give extra breathing room vertically */
+  padding: 1vh 0;
+}
+
+.phoneMockup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phoneImg {
+  /* Height matches what the phone mockup occupied before */
+  max-height: 350px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.45));
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.4s var(--ease-out-expo), filter 0.4s ease;
+}
+
+/* Dark mode: enhanced depth + subtle emerald reflection glow */
+[data-theme="dark"] .phoneImg {
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 30px rgba(0, 168, 130, 0.12));
+}
+
+.phoneMockup:hover .phoneImg {
+  transform: translateY(-6px) scale(1.02);
+  filter: drop-shadow(0 28px 50px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 40px rgba(0, 168, 130, 0.25));
+}
+
+/* Ambient glow pulse behind phone */
+.phoneGlow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 55% 50%,
+    rgba(0, 168, 130, 0.18) 0%,
+    transparent 65%
+  );
+  filter: blur(24px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════
+   RIGHT COLUMN: Download CTA
+   Mirrors left column weight/size
+══════════════════════════════════ */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  align-items: flex-start;
+}
+
+/* Store badges — larger, higher contrast ──────── */
 .badgesWrap {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.8rem;
   width: fit-content;
 }
 
 .storeBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.6rem 1.25rem;
-  border-radius: var(--radius-md);
+  gap: 1rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 14px;
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   color: var(--color-text-primary);
   text-decoration: none;
-  box-shadow: 0 4px 14px var(--color-shadow);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  /* Wider so text has room to breathe */
+  min-width: 200px;
   transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-  min-width: 175px;
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .storeBadge:hover {
   border-color: var(--color-brand-light);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 168, 130, 0.2);
+  box-shadow: 0 10px 28px rgba(0, 168, 130, 0.22);
 }
 
+/* Apple icon — adapts to theme color */
 .storeIcon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* Google Play — always uses brand colors */
+.storeIconColor {
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
 }
 
 .badgeText {
   display: flex;
   flex-direction: column;
-  gap: 0.08rem;
+  gap: 0.05rem;
 }
 
 .badgeSub {
   font-family: var(--font-sans);
-  font-size: 0.56rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-text-muted);
+  /* Crisp subtext */
+  -webkit-font-smoothing: antialiased;
 }
 
 .badgeMain {
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: 0.96rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ══════════════════════════════════
-   COLUMNA CENTRAL: MOCKUP PHONE (HORIZONTAL)
-══════════════════════════════════ */
-.centerCol {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.phoneMockupHorizontal {
-  position: relative;
-  width: 100%;
-  max-width: 440px; /* Horizontal phone dimensions */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.phoneFrameHorizontal {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 18.5 / 9; /* Landscape smartphone ratio */
-  border-radius: 28px;
-  background: #0d0e11;
-  border: 2.5px solid rgba(0, 168, 130, 0.45);
-  box-shadow:
-    0 20px 50px -10px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  padding: 8px 8px 8px 18px; /* Left padding accommodates landscape notch */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.phoneMockupHorizontal:hover .phoneFrameHorizontal {
-  border-color: var(--color-brand-light);
-  transform: translateY(-3px);
-  box-shadow:
-    0 25px 60px -8px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(0, 168, 130, 0.25);
-}
-
-/* Left Notch / Island in landscape orientation */
-.phoneNotchLandscape {
-  position: absolute;
-  left: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 7px;
-  height: 48px;
-  background: #000000;
-  border-radius: 99px;
-  z-index: 10;
-}
-
-/* Landscape Screen */
-.phoneScreenHorizontal {
-  flex: 1;
-  height: 100%;
-  background: linear-gradient(135deg, #121418 0%, #08090b 100%);
-  border-radius: 20px;
-  padding: 0.65rem 0.85rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.phoneHeaderLandscape {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.phoneLogo {
-  font-family: 'Nunito', 'Inter', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #00a882;
-  letter-spacing: -0.02em;
-}
-
-.phoneHeaderDots {
-  display: flex;
-  gap: 4px;
-}
-
-.phoneHeaderDots span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Landscape Content Body (2 Columns side by side) */
-.phoneBodyLandscape {
-  display: grid;
-  grid-template-columns: 1.1fr 1.4fr;
-  gap: 0.7rem;
-  align-items: center;
-}
-
-.phoneHeroPreviewLandscape {
-  background: rgba(0, 168, 130, 0.08);
-  border: 1px solid rgba(0, 168, 130, 0.22);
-  border-radius: 12px;
-  padding: 0.6rem 0.65rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.phoneHeroTag {
-  font-size: 0.54rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #00a882;
-}
-
-.phoneHeroText {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #ffffff;
-  line-height: 1.2;
-}
-
-.phoneCardGridLandscape {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.4rem;
-}
-
-.phoneMiniCard {
-  aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.phoneHomeBarLandscape {
-  width: 70px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 99px;
-  margin: 2px auto 0;
-}
-
-.phoneGlow {
-  position: absolute;
-  inset: -10px;
-  border-radius: 36px;
-  background: radial-gradient(
-    circle,
-    rgba(0, 168, 130, 0.2) 0%,
-    transparent 70%
-  );
-  filter: blur(20px);
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* ══════════════════════════════════
-   COLUMNA DERECHA: CONVERSION CTA
-══════════════════════════════════ */
-.rightCol {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: flex-start;
-}
-
-.ctaHeading {
-  font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: clamp(1.4rem, 2vw, 2.1rem);
-  line-height: 1.16;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: var(--color-text-primary);
-  transition: color 0.3s ease;
-}
-
-.ctaActionWrap {
-  width: 100%;
-}
-
-.primaryCtaBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 0.88rem 1.85rem;
-  border-radius: 10px;
-  background: transparent;
-  border: 1.8px solid var(--color-brand-light);
-  color: var(--color-text-primary);
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  box-shadow: 0 4px 18px rgba(0, 168, 130, 0.15);
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    gap 0.25s ease;
-  width: fit-content;
-}
-
-.primaryCtaBtn:hover {
-  background: var(--color-brand);
-  border-color: var(--color-brand);
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 168, 130, 0.3);
-  gap: 1rem;
-}
-
-.primaryCtaBtn:active {
-  transform: translateY(0);
-}
-
-.ctaArrow {
-  font-size: 1.05rem;
-  line-height: 1;
-  transition: transform 0.25s var(--ease-out-expo);
-}
-
-.primaryCtaBtn:hover .ctaArrow {
-  transform: translateX(3px);
-}
-
-/* ── Bottom Copyright Bar ── */
+/* ── Copyright bar ──────────────────────────────── */
 .bottomBar {
   position: relative;
   z-index: 1;
-  max-width: 1400px;
-  margin: 5vh auto 0;
-  padding-top: 2vh;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  max-width: 1280px;
+  margin: 4vh auto 0;
+  padding: 2vh 5vw 0;
+  border-top: 1px solid rgba(128, 128, 128, 0.12);
   text-align: center;
 }
 
 .copyText {
   font-family: var(--font-sans);
   font-size: 0.72rem;
+  letter-spacing: 0.02em;
   color: var(--color-text-muted);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ══════════════════════════════════
@@ -400,7 +276,7 @@
 @media (max-width: 1024px) {
   .container {
     grid-template-columns: 1fr;
-    gap: 3.5rem;
+    gap: 3rem;
     text-align: center;
   }
 
@@ -409,52 +285,60 @@
     align-items: center;
   }
 
+  .appTitle,
+  .ctaHeading {
+    font-size: clamp(1.7rem, 5.2vw, 2.3rem);
+  }
+
+  /* Stack: tagline → phone → download */
+  .leftCol   { order: 1; }
+  .centerCol { order: 2; }
+  .rightCol  { order: 3; }
+
+  .bgTexture { display: none; }
+
+  .phoneImg {
+    max-height: 280px;
+  }
+
   .badgesWrap {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
-
-  .rightCol {
-    order: 1;
-  }
-
-  .centerCol {
-    order: 2;
-  }
-
-  .leftCol {
-    order: 3;
-  }
-
-  .primaryCtaBtn {
-    width: 100%;
-    max-width: 320px;
-  }
 }
 
 @media (max-width: 600px) {
   .section {
-    padding: 6vh 5vw 4vh;
+    padding: 5vh 0 3.5vh;
   }
 
   .container {
-    gap: 2.8rem;
+    gap: 2.5rem;
   }
 
   .appTitle,
   .ctaHeading {
-    font-size: 1.35rem;
+    font-size: clamp(1.5rem, 6.8vw, 1.9rem);
+  }
+
+  .phoneImg {
+    max-height: 240px;
   }
 
   .badgesWrap {
     flex-direction: column;
     width: 100%;
-    max-width: 280px;
+    max-width: 260px;
   }
 
   .storeBadge {
     width: 100%;
     justify-content: center;
+  }
+
+  .bottomBar {
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 }
