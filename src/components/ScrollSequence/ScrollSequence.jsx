@@ -4,24 +4,28 @@ import styles from './ScrollSequence.module.css'
 /* ─────────────────────────────────────────────────────────────
    ScrollSequence — Ambient Background Hero
    ──────────────────────────────────────────────────────────
-   New video: user interacting with the Findclo app on a phone.
-   Frames are vertical (9:16). Desktop viewport is horizontal.
+   New video: user interacting with the Findclo app (hand-held
+   phone). Frames are HORIZONTAL (16:9). Desktop viewport is
+   also horizontal — near-perfect cover fit. Mobile (portrait)
+   uses cover-scale so the phone area stays centered & visible.
 
    Architecture: TWO synchronized canvases rendered from the
    same Image[] array in a single shared RAF loop.
 
-   1. bgCanvas — cover-scaled frame + blur(60px) + dark overlay.
-      Fills 100% of the section to eliminate letterboxing.
+   1. bgCanvas — cover-scaled frame + blur + theme-adaptive
+      overlay. Fills 100% of the section, eliminates letterboxing.
 
-   2. fgCanvas — contain-scaled frame centered at natural
-      aspect ratio. Shows the phone crisply, no distortion.
+   2. fgCanvas — cover-scaled frame (no blur). Shows the scene
+      at full quality. On desktop the 16:9 frame fills naturally.
+      On mobile (portrait) we still cover-scale and let CSS
+      positioning focus on the phone/hand area.
 
    Both are driven by the same `currentFrame` value so they
    are guaranteed to always show the same image.
    ───────────────────────────────────────────────────────── */
 
 const TOTAL_FRAMES = 190
-const FOLDER_PATH  = '/frames_hero'
+const FOLDER_PATH  = '/fotogramasUltimaVersion'
 
 export default function ScrollSequence({ children }) {
   const containerRef = useRef(null)
@@ -96,10 +100,11 @@ export default function ScrollSequence({ children }) {
       bgCtx.drawImage(img, 0, 0, iw, ih, cx, cy, nw, nh)
     }
 
-    /* ── Draw FOREGROUND canvas (contain — preserve aspect ratio) ─
-       The vertical frame (9:16) is displayed contain-fit within
-       the center of the foreground canvas. On desktop this creates
-       a crisp portrait window. On mobile it fills the screen.
+    /* ── Draw FOREGROUND canvas (cover — fill viewport, no letterbox) ─
+       The horizontal frame (16:9) fills the viewport with cover-scale.
+       On desktop (16:9 viewport): almost pixel-perfect fill.
+       On mobile (portrait): cover-scales so the phone+hand area is
+       visible and centered — no blank bars on the sides.
     ────────────────────────────────────────────────────────────── */
     function drawForeground(img) {
       const pw = fgCanvas.width
@@ -107,8 +112,8 @@ export default function ScrollSequence({ children }) {
       const iw = img.naturalWidth
       const ih = img.naturalHeight
 
-      // Contain scale: fit the entire frame, keep aspect ratio
-      const scale = Math.min(pw / iw, ph / ih)
+      // Cover scale: fill the canvas, crop edges to avoid bars
+      const scale = Math.max(pw / iw, ph / ih)
       const nw    = iw * scale
       const nh    = ih * scale
       const cx    = (pw - nw) * 0.5

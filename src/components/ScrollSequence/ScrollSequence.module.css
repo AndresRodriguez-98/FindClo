@@ -29,13 +29,17 @@
   background: #080808;
 }
 
+/* Light mode: frames have a light grey bg → use a white fallback */
+[data-theme="light"] .stickyViewport {
+  background: #f0eeeb;
+}
+
 /* ══════════════════════════════════════════════════
    LAYER 1 — AMBIENT BACKGROUND CANVAS
    ══════════════════════════════════════════════════
-   Same canvas drawn cover-scaled, then:
-   • CSS blur makes it soft and cinematic
-   • ::after overlay darkens it to ~40% brightness
-   • z-index: 0 — sits at the very back
+   Cover-scaled, heavily blurred, then darkened (dark
+   mode) or slightly tinted (light mode) for the
+   cinematic ambient effect behind the crisp fg frame.
    ══════════════════════════════════════════════════ */
 .bgCanvas {
   position: absolute;
@@ -45,28 +49,34 @@
   pointer-events: none;
   z-index: 0;
 
-  /* ── The cinematic effect: ────────────────────────
-     blur(55px)         — heavy defocus
-     saturate(1.3)      — push colors slightly to avoid
-                          the desaturated look heavy blur
-                          produces
-     brightness(0.38)   — darken so fg frame pops and
-                          hero text stays legible
-  ─────────────────────────────────────────────────── */
-  filter: blur(55px) saturate(1.3) brightness(0.38);
+  /* DARK MODE defaults
+     blur(55px)       — heavy defocus, cinematic
+     saturate(1.2)    — compensate desaturation from blur
+     brightness(0.32) — darken significantly so fg pops
+                        and hero text stays legible       */
+  filter: blur(55px) saturate(1.2) brightness(0.32);
 
-  /* Overscan: the blur creates a ~30px halo at edges.
-     Scale slightly to hide the halo without clipping
-     the actual content. */
+  /* Overscan: blur creates a ~30px halo at edges.
+     Scale slightly to hide the halo without clipping. */
   transform: scale(1.08);
   transform-origin: center center;
+}
+
+/* LIGHT MODE — frames already have a clean light-grey bg.
+   We keep a gentle blur for depth but barely darken:
+   the overall effect is a soft, airy, editorial feel. */
+[data-theme="light"] .bgCanvas {
+  filter: blur(35px) saturate(1.05) brightness(0.75);
+  transform: scale(1.06);
 }
 
 /* ══════════════════════════════════════════════════
    LAYER 2 — FOREGROUND FRAME CANVAS
    ══════════════════════════════════════════════════
-   Contain-scaled frame (9:16) centered in the viewport.
-   Clean, no filter. Above the background, below children.
+   Cover-scaled frame (16:9) — same ratio as most
+   desktops so it fills naturally. On mobile we
+   cover-scale vertically and crop sides; the phone
+   hand-held in the center of the frame stays visible.
    ══════════════════════════════════════════════════ */
 .fgCanvas {
   position: absolute;
@@ -77,21 +87,66 @@
   z-index: 1;
 }
 
+/* ── Light-mode fg tint overlay ──────────────────────
+   The new frames have a neutral grey background.
+   In light mode we don't want a deep dark vignette —
+   instead a gentle warm-to-transparent overlay helps
+   the text column remain readable without crushing the
+   light aesthetics of the video.                      */
+[data-theme="light"] .fgCanvas {
+  /* Slightly boost contrast so the frame doesn't look washed */
+  filter: contrast(1.04) saturate(1.08);
+}
+
 /* ── Subtle vignette around the fg canvas edges ──
-   Helps the fg frame blend into the ambient bg
-   rather than looking pasted on top of it.
-   Applied as a pseudo-element on the viewport.  */
+   Helps the fg frame blend into the ambient bg.
+   Dark mode: black radial vignette.
+   Light mode: softer, lighter vignette.            */
 .stickyViewport::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
+  /* DARK MODE default */
   background: radial-gradient(
-    ellipse 75% 85% at center,
-    transparent 45%,
-    rgba(0, 0, 0, 0.55) 100%
+    ellipse 80% 85% at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.52) 100%
   );
+  transition: background 0.4s ease;
+}
+
+/* LIGHT MODE vignette — much softer */
+[data-theme="light"] .stickyViewport::after {
+  background: radial-gradient(
+    ellipse 80% 85% at center,
+    transparent 45%,
+    rgba(240, 238, 235, 0.4) 100%
+  );
+}
+
+/* ── Mobile-specific adjustments ─────────────────────
+   On portrait screens (< 768px) the 16:9 frame is
+   cover-scaled, which crops the top/bottom. The action
+   is in the center of the frame so we shift the
+   viewport anchor upward slightly to keep the phone
+   hand in view rather than a random crop.             */
+@media (max-width: 768px) {
+  .fgCanvas {
+    /* Leave at inset:0 — cover-scale handles centering.
+       The JS drawForeground uses cx/cy center anchoring. */
+    object-position: center 35%;
+  }
+
+  .bgCanvas {
+    /* Slightly less blur on small screens for performance */
+    filter: blur(40px) saturate(1.15) brightness(0.3);
+  }
+
+  [data-theme="light"] .bgCanvas {
+    filter: blur(25px) saturate(1.05) brightness(0.78);
+  }
 }
 
 /* ── Children (HeroOverlay text) sit above everything ─
